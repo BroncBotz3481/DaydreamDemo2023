@@ -62,7 +62,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public DrivetrainSubsystem() {
         
 
-        navX.calibrate();
+       // navX.calibrate();
         // pidTab = Shuffleboard.getTab("PID");
         // leftVelocityWidget = pidTab.addNumber("LeftVelocity", ()->{return DrivetrainPolicy.getLeftVelocity();});
         // rightVelocityWidget = pidTab.addNumber("RightVelocity", ()->{return DrivetrainPolicy.getRightVelocity();});
