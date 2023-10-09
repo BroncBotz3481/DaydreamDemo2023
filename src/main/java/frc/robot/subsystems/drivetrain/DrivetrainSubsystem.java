@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
@@ -38,10 +39,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class DrivetrainSubsystem extends SubsystemBase {
     
     public static AHRS navX;
+
     private final CANSparkMax frontLeftMotor;
     private final CANSparkMax backLeftMotor;
     private final CANSparkMax frontRightMotor;
     private final CANSparkMax backRightMotor;
+
+    private MotorControllerGroup leftSide;
+    private MotorControllerGroup rightSide;
 
     private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;
@@ -62,7 +67,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public DrivetrainSubsystem() {
         
 
-        navX.calibrate();
+        //navX.calibrate();
         // pidTab = Shuffleboard.getTab("PID");
         // leftVelocityWidget = pidTab.addNumber("LeftVelocity", ()->{return DrivetrainPolicy.getLeftVelocity();});
         // rightVelocityWidget = pidTab.addNumber("RightVelocity", ()->{return DrivetrainPolicy.getRightVelocity();});
@@ -80,17 +85,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
         frontRightMotor.setIdleMode(IdleMode.kCoast);
         backRightMotor.setIdleMode(IdleMode.kCoast);
 
-        backLeftMotor.follow(frontLeftMotor);//frontLeftMotor is the leader
-        backRightMotor.follow(frontRightMotor);//frontRightMotor is the leader
 
-        frontRightMotor.setInverted(false);
-        frontLeftMotor.setInverted(true);
+        leftSide = new MotorControllerGroup(backLeftMotor, frontLeftMotor);
+        rightSide = new MotorControllerGroup(backRightMotor, frontRightMotor);
+
+        // backLeftMotor.follow(frontLeftMotor);//frontLeftMotor is the leader
+        // backRightMotor.follow(frontRightMotor);//frontRightMotor is the leader
+
+        frontRightMotor.setInverted(true);
+        backRightMotor.setInverted(false);
+        frontLeftMotor.setInverted(false);
+        backLeftMotor.setInverted(true);
 
         leftEncoder = frontLeftMotor.getEncoder();
         rightEncoder = frontRightMotor.getEncoder();
 
 
-        driveTrain = new DifferentialDrive(backLeftMotor, frontRightMotor);
+        driveTrain = new DifferentialDrive(leftSide, rightSide);
 
         leftPIDController = backLeftMotor.getPIDController();
         rightPIDController = frontRightMotor.getPIDController();
@@ -103,6 +114,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void setPIDF(double P, double I, double D, double F, double integralZone){
+        System.out.println("IS PID RUNNING?");
         leftPIDController.setP(P);
         leftPIDController.setI(I);
         leftPIDController.setD(D);
@@ -119,7 +131,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void run(double powerLeft, double powerRight) {
         DrivetrainPolicy.powerLeft = powerLeft;
         DrivetrainPolicy.powerRight = powerRight;
-        driveTrain.tankDrive(DrivetrainPolicy.powerLeft * DrivetrainPolicy.setPowerScale(), DrivetrainPolicy.powerRight * DrivetrainPolicy.setPowerScale());
+        // frontLeftMotor.set(DrivetrainPolicy.powerLeft);
+         //backLeftMotor.set(DrivetrainPolicy.powerLeft);
+         //frontRightMotor.set(DrivetrainPolicy.powerRight);
+         backRightMotor.set(DrivetrainPolicy.powerRight);
+         System.out.println(DrivetrainPolicy.powerRight);
+       //driveTrain.tankDrive(DrivetrainPolicy.powerLeft * DrivetrainPolicy.setPowerScale(), DrivetrainPolicy.powerRight * DrivetrainPolicy.setPowerScale());
 
     }
 //For Orry

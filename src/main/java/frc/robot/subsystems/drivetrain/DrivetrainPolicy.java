@@ -21,8 +21,8 @@ import frc.robot.Constants;
 public final class DrivetrainPolicy {
     public static double powerLeft; // power for left motors
     public static double powerRight; // power for right motors
-    public static double forwardPowerScale = 0.85;
-    public static double backwardPowerScale = 0.7;
+    public static double forwardPowerScale = 1;
+    public static double backwardPowerScale = 1;
     private static Rotation2d gyroAngle = new Rotation2d(0);
     private static Pose2d initialPoseMeters = new Pose2d(0, 0, gyroAngle);
     //public static DifferentialDriveOdometry driveOdometry = new DifferentialDriveOdometry(gyroAngle, initialPoseMeters);
@@ -63,7 +63,7 @@ public final class DrivetrainPolicy {
 
     public static double setPowerScale() {
 
-        if (powerLeft > 0 && powerRight > 0) {
+        if (powerRight > 0 || powerLeft > 0) {
             return backwardPowerScale; //backward speed
         }
         return forwardPowerScale; //forward speed
