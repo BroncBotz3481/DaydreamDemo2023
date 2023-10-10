@@ -38,12 +38,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class DrivetrainSubsystem extends SubsystemBase {
     
     public static AHRS navX;
-    private final CANSparkMax frontLeftMotor;
+    //private final CANSparkMax frontLeftMotor;
     private final CANSparkMax backLeftMotor;
     private final CANSparkMax frontRightMotor;
-    private final CANSparkMax backRightMotor;
+    //private final CANSparkMax backRightMotor;
 
-    private final RelativeEncoder leftEncoder;
+   // private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;
     private final DifferentialDrive driveTrain;
 
@@ -71,22 +71,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // kD = pidTab.add("kD", 0);
         // kF = pidTab.add("kF", 0);
 
-        frontLeftMotor = new CANSparkMax(4, MotorType.kBrushless);
+        //frontLeftMotor = new CANSparkMax(4, MotorType.kBrushless);
         backLeftMotor = new CANSparkMax(3, MotorType.kBrushless);
-        frontRightMotor = new CANSparkMax(1, MotorType.kBrushless);
-        backRightMotor = new CANSparkMax(2, MotorType.kBrushless);
-        frontLeftMotor.setIdleMode(IdleMode.kCoast);
+        frontRightMotor = new CANSparkMax(2, MotorType.kBrushless);
+        //backRightMotor = new CANSparkMax(1, MotorType.kBrushless);
+        //frontLeftMotor.setIdleMode(IdleMode.kCoast);
         backLeftMotor.setIdleMode(IdleMode.kCoast);
         frontRightMotor.setIdleMode(IdleMode.kCoast);
-        backRightMotor.setIdleMode(IdleMode.kCoast);
+        //backRightMotor.setIdleMode(IdleMode.kCoast);
 
         // backLeftMotor.follow(frontLeftMotor);//frontLeftMotor is the leader
         // backRightMotor.follow(frontRightMotor);//frontRightMotor is the leader
 
         frontRightMotor.setInverted(false);
-        frontLeftMotor.setInverted(true);
+        //frontLeftMotor.setInverted(true);
 
-        leftEncoder = frontLeftMotor.getEncoder();
+        //leftEncoder = frontLeftMotor.getEncoder();
         rightEncoder = frontRightMotor.getEncoder();
 
 
@@ -119,17 +119,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void run(double powerLeft, double powerRight) {
         DrivetrainPolicy.powerLeft = powerLeft;
         DrivetrainPolicy.powerRight = powerRight;
-        frontLeftMotor.set(DrivetrainPolicy.powerLeft * DrivetrainPolicy.setPowerScale());
-        backLeftMotor.set(DrivetrainPolicy.powerLeft * DrivetrainPolicy.setPowerScale());
+        //frontLeftMotor.set(-DrivetrainPolicy.powerLeft * DrivetrainPolicy.setPowerScale());
+        backLeftMotor.set(-DrivetrainPolicy.powerLeft * DrivetrainPolicy.setPowerScale());
         frontRightMotor.set(DrivetrainPolicy.powerRight * DrivetrainPolicy.setPowerScale());
-        backRightMotor.set(DrivetrainPolicy.powerRight * DrivetrainPolicy.setPowerScale());
+        //backRightMotor.set(DrivetrainPolicy.powerRight * DrivetrainPolicy.setPowerScale());
        // driveTrain.tankDrive(DrivetrainPolicy.powerLeft * DrivetrainPolicy.setPowerScale(), DrivetrainPolicy.powerRight * DrivetrainPolicy.setPowerScale());
         System.out.println("Left power passed in: " + DrivetrainPolicy.powerLeft);
         System.out.println("Right power passed in: " + DrivetrainPolicy.powerRight);
         System.out.println("Back left power that is outputed: " + backLeftMotor.get());
-        System.out.println("Front left power that is outputed: " + frontLeftMotor.get());
+        //System.out.println("Front left power that is outputed: " + frontLeftMotor.get());
         System.out.println("Front right power that is outputed: " + frontRightMotor.get());
-        System.out.println("Back right power that is outputed: " + backRightMotor.get());
+        //System.out.println("Back right power that is outputed: " + backRightMotor.get());
     }
     
 //For Orry
@@ -143,9 +143,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void setGearRatio(double gearRatio) {
-        leftEncoder.setVelocityConversionFactor(gearRatio);
+    //    leftEncoder.setVelocityConversionFactor(gearRatio);
         rightEncoder.setVelocityConversionFactor(gearRatio);
-        leftEncoder.setPositionConversionFactor(gearRatio);
+      //  leftEncoder.setPositionConversionFactor(gearRatio);
         rightEncoder.setPositionConversionFactor(gearRatio);
 
 
@@ -155,8 +155,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void periodic() {
         DrivetrainPolicy.rightEncoderPosition = rightEncoder.getPosition();
         DrivetrainPolicy.rightEncoderVelocity = rightEncoder.getVelocity();
-        DrivetrainPolicy.leftEncoderPosition = leftEncoder.getPosition();
-        DrivetrainPolicy.leftEncoderVelocity = leftEncoder.getVelocity();
+     //   DrivetrainPolicy.leftEncoderPosition = leftEncoder.getPosition();
+       // DrivetrainPolicy.leftEncoderVelocity = leftEncoder.getVelocity();
        // DrivetrainPolicy.position = DrivetrainPolicy.driveOdometry.update(Rotation2d.fromDegrees(navX.getAngle()), leftEncoder.getPosition(), rightEncoder.getPosition());
     }
 }
