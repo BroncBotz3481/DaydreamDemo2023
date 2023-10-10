@@ -80,8 +80,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         frontRightMotor.setIdleMode(IdleMode.kCoast);
         backRightMotor.setIdleMode(IdleMode.kCoast);
 
-        backLeftMotor.follow(frontLeftMotor);//frontLeftMotor is the leader
-        backRightMotor.follow(frontRightMotor);//frontRightMotor is the leader
+        // backLeftMotor.follow(frontLeftMotor);//frontLeftMotor is the leader
+        // backRightMotor.follow(frontRightMotor);//frontRightMotor is the leader
 
         frontRightMotor.setInverted(false);
         frontLeftMotor.setInverted(true);
@@ -119,9 +119,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void run(double powerLeft, double powerRight) {
         DrivetrainPolicy.powerLeft = powerLeft;
         DrivetrainPolicy.powerRight = powerRight;
-        driveTrain.tankDrive(DrivetrainPolicy.powerLeft * DrivetrainPolicy.setPowerScale(), DrivetrainPolicy.powerRight * DrivetrainPolicy.setPowerScale());
-
+        frontLeftMotor.set(DrivetrainPolicy.powerLeft * DrivetrainPolicy.setPowerScale());
+        backLeftMotor.set(DrivetrainPolicy.powerLeft * DrivetrainPolicy.setPowerScale());
+        frontRightMotor.set(DrivetrainPolicy.powerRight * DrivetrainPolicy.setPowerScale());
+        backRightMotor.set(DrivetrainPolicy.powerRight * DrivetrainPolicy.setPowerScale());
+       // driveTrain.tankDrive(DrivetrainPolicy.powerLeft * DrivetrainPolicy.setPowerScale(), DrivetrainPolicy.powerRight * DrivetrainPolicy.setPowerScale());
+        System.out.println("Left power passed in: " + DrivetrainPolicy.powerLeft);
+        System.out.println("Right power passed in: " + DrivetrainPolicy.powerRight);
+        System.out.println("Back left power that is outputed: " + backLeftMotor.get());
+        System.out.println("Front left power that is outputed: " + frontLeftMotor.get());
+        System.out.println("Front right power that is outputed: " + frontRightMotor.get());
+        System.out.println("Back right power that is outputed: " + backRightMotor.get());
     }
+    
 //For Orry
     public void set(double leftspeed, double rightspeed) {
 
