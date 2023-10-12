@@ -50,8 +50,8 @@ public class DrivetrainCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-    
-        m_drivetrainSubsystem.run( m_leftpower.getAsDouble(), m_rightpower.getAsDouble());
+        if(Math.abs(m_leftpower.getAsDouble()) > 0.05 || Math.abs(m_rightpower.getAsDouble()) > 0.05)
+            m_drivetrainSubsystem.run( m_leftpower.getAsDouble(), m_rightpower.getAsDouble());
     }
 
     // Called once the command ends or is interrupted.
